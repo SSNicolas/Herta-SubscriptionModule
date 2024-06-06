@@ -34,7 +34,10 @@ class ResPartner(models.Model):
                 "Corretor" if record.category_id[0].id == 2 else \
                     "Recepcionista" if record.category_id[0].id == 3 else None
         fname = name_parts[0]
-        lname = ' '.join(name_parts[1:])
+        if len(name_parts) > 1:
+            lname = ' '.join(name_parts[1:])
+        else:
+            lname = '-'
 
         image_base64 = base64.b64encode(record.image_1920).decode('utf-8') if record.image_1920 else None
         if action == "create":
