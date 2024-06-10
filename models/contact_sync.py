@@ -49,6 +49,14 @@ class ResPartner(models.Model):
                 "user_group": group_parts,
                 "subject_photo": image_base64
             }
+            data_encoded = json.dumps(payload).encode('utf-8')
+
+            headers = {
+                'Content-Type': 'application/json',
+                'Content-Length': len(data_encoded)
+            }
+
+            req = urllib.request.Request(url=base_url, data=data_encoded, headers=headers, method='POST')
 
         elif action == "write":
             base_url = 'http://192.168.10.186:7998/write/'
@@ -56,24 +64,34 @@ class ResPartner(models.Model):
                 "user_id": record.id,
                 "user_fname": fname,
                 "user_lname": lname,
+                "user_comments": record.ref,
                 "user_group": group_parts,
                 "subject_photo": image_base64
             }
+            data_encoded = json.dumps(payload).encode('utf-8')
+
+            headers = {
+                'Content-Type': 'application/json',
+                'Content-Length': len(data_encoded)
+            }
+
+            req = urllib.request.Request(url=base_url, data=data_encoded, headers=headers, method='PUT')
 
         elif action == "unlink":
             base_url = 'http://192.168.10.186:7998/delete/'
             payload = {
                 "user_id": record.id
             }
+            data_encoded = json.dumps(payload).encode('utf-8')
 
-        data_encoded = json.dumps(payload).encode('utf-8')
+            headers = {
+                'Content-Type': 'application/json',
+                'Content-Length': len(data_encoded)
+            }
 
-        headers = {
-            'Content-Type': 'application/json',
-            'Content-Length': len(data_encoded)
-        }
+            req = urllib.request.Request(url=base_url, data=data_encoded, headers=headers, method='DELETE')
 
-        req = urllib.request.Request(url=base_url, data=data_encoded, headers=headers, method='POST')
+
 
         try:
             response = urllib.request.urlopen(req)
